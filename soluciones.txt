@@ -1,0 +1,35 @@
+//mostrar logo
+
+public static void mostrarLogo() throws FileNotFoundException{
+        //lanzamos la excepcion para que sea capturada en el main
+        File logo_pokemon = new File("logo.pok.txt");
+        Scanner lectura = new Scanner (logo_pokemon);
+
+        while(lectura.hasNextLine()) {
+            String logo = lectura.nextLine();
+            System.out.println(logo);
+        }
+        lectura.close();
+}
+
+
+// crear interface
+
+void cazar_Pokemon(); //metodo para cazar pokemons
+void listar_Mochila(); //mostrar los pokemons cazados
+boolean transferir_Pokemon(); //tranferir un pokemon
+boolean recibir_Pokemon(); //recibir la transferencia de un pokemon
+void Salir(); //finalizar programa
+
+
+//mostrar logo en el main
+public static void Logo(){
+        try {
+            PersistenciaPokemon.mostrarLogo();
+            System.out.println("");
+            
+        } catch (FileNotFoundException ex) {
+            System.out.println("No se ha encontrado el logo");
+        }
+    }
+

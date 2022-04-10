@@ -14,5 +14,5 @@ import java.util.Scanner;
  */
 public class PersistenciaPokemon {
     
-    //hacer aqui el mostrar logo, tiene que ser estatico el metodo void
+    
 }

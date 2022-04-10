@@ -10,4 +10,5 @@ package Objetos;
  */
 public class Pokemon {
     private String nombre;
+    private int CP;
 }

@@ -48,6 +48,7 @@ public class Pokemon_Go {
         
     }
     
+    //fase2y3
     public void Identificacion(String nombre, String contraseña, Scanner sc){
         
         String ruta = "Usuarios/user_" + nombre + ".dat.txt";//En Windows si que importan las 

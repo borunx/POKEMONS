@@ -13,5 +13,4 @@ import Objetos.Pokemon;
 public interface Operaciones_basicas {
     
     public boolean cazar_pokemon(Pokemon pokemon); //metodo para agregar pokemons a la mochila
-    //public void Salir(); //Finalizar el programa, guardar pokemons en fichero_mochila
 }

@@ -36,13 +36,6 @@ public class Pokemon_Go {
         poke_operaciones = new DAOPokemon();
         Scanner sc = new Scanner (System.in);
         
-        try {
-            Logo.mostrarLogo();
-            
-        } catch (FileNotFoundException ex) {
-            System.out.println("No se ha encontrado el logo");
-        }
-        
         //login usuario, pedir datos
         System.out.println("Nombre de usuario: ");
         String nombre = sc.nextLine();
@@ -57,11 +50,21 @@ public class Pokemon_Go {
         switch (opcion){
             case 1:
                 cazar_Pokemon();
-                break;                                                                                                                                
+                break;
+            case 2:
+                System.out.println("No implementada");
+                break; 
+            case 3:
+                System.out.println("No implementada");
+                break; 
+            case 4:
+                System.out.println("No implementada");
+                break; 
+            case 0:
+                System.out.println("Fin de partida, hasta la proxima.");
+                break; 
             
         }
-        
-        
         
     }
     

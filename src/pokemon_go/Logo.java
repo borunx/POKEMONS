@@ -14,14 +14,4 @@ import java.util.Scanner;
  */
 public class Logo {
     
-    public static void mostrarLogo() throws FileNotFoundException{
-        File logo_pokemon = new File("PokeImagenes/logo.pok.txt");
-        Scanner lectura = new Scanner (logo_pokemon);
-
-        while(lectura.hasNextLine()) {
-            System.out.println(lectura.nextLine());
-        }
-        System.out.println("");
-        lectura.close();
-    }
 }

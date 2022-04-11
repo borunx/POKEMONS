@@ -4,11 +4,14 @@
  */
 package pokemon_go;
 
+import Objetos.Pokemon;
 import Persistencia.PersistenciaPokemon;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,6 +27,9 @@ public class Pokemon_Go {
      */
     public static void main(String[] args) {
         Pokemon_Go app = new Pokemon_Go();
+        
+        
+        
         app.lanzarApp();
     }
     
@@ -36,7 +42,7 @@ public class Pokemon_Go {
     private void lanzarApp(){
         poke_operaciones = new DAOPokemon();
         
-        Scanner sc = new Scanner (System.in);
+        /*Scanner sc = new Scanner (System.in);
         //login usuario, pedir datos
         System.out.println("Nombre de usuario: ");
         String nombre = sc.nextLine();
@@ -44,7 +50,9 @@ public class Pokemon_Go {
         System.out.println("Contraseña: ");
         String contraseña = sc.nextLine();
         
-        Identificacion(nombre, contraseña,sc);
+        Identificacion(nombre, contraseña,sc);*/
+        
+        cazar_Pokemon();
         
     }
     
@@ -69,7 +77,6 @@ public class Pokemon_Go {
                     System.out.println("Login incorrecto");
             }
             lectura.close();
-        
             
         } catch (FileNotFoundException ex) {
             System.out.println("No se ha encontrado el usuario");
@@ -87,6 +94,46 @@ public class Pokemon_Go {
                     ex1.printStackTrace();
                 }
             }
+        }
+    }
+    
+    public void cazar_Pokemon(){
+        
+        File nombres_pok = new File("nombres.pok.txt");
+        
+        ArrayList<String> poke_nombres = new ArrayList<String>();
+        
+        try {
+            Scanner lectura = new Scanner(nombres_pok);
+            while(lectura.hasNextLine()) {
+                String frase = lectura.nextLine();
+                poke_nombres.add(frase);
+            }
+            lectura.close();
+            
+        } catch (FileNotFoundException e) {
+            System.out.println("Fichero no encontrado");
+        }
+        
+        //System.out.println(poke_nombres.toString());
+        Random rd = new Random();
+        
+        int eleccion_pokemon = rd.nextInt(poke_nombres.size());
+        
+        String pokemon_azar = poke_nombres.get(eleccion_pokemon);
+        
+        String ruta_pokemon = "PokeImagenes/" +pokemon_azar + ".pok.txt";
+        
+        //System.out.println(ruta_pokemon);
+        Pokemon anyadir = new Pokemon(pokemon_azar); //crear pokemon
+        poke_operaciones.cazar_pokemon(anyadir);//añadirlo a la mochila
+        
+        try {
+            PersistenciaPokemon.visualizarPokemon(ruta_pokemon);
+            System.out.println(pokemon_azar + " tiene un CP de " + anyadir.getCP());
+            
+        } catch (FileNotFoundException ex) {
+            System.out.println("No se ha encontrado el fichero");
         }
     }
     

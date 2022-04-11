@@ -18,6 +18,16 @@ public class DAOPokemon implements Operaciones_basicas{
     public DAOPokemon() {
         mochila = new ArrayList<Pokemon>();
     }
+
+    @Override
+    public boolean cazar_pokemon(Pokemon pokemon) {
+        return mochila.add(pokemon);
+    }
+
+    public ArrayList<Pokemon> getMochila() {
+        return mochila;
+    }
+    
     
     
 }

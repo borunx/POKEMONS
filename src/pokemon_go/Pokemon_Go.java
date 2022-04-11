@@ -42,7 +42,7 @@ public class Pokemon_Go {
     private void lanzarApp(){
         poke_operaciones = new DAOPokemon();
         
-        /*Scanner sc = new Scanner (System.in);
+        Scanner sc = new Scanner (System.in);
         //login usuario, pedir datos
         System.out.println("Nombre de usuario: ");
         String nombre = sc.nextLine();
@@ -50,7 +50,7 @@ public class Pokemon_Go {
         System.out.println("Contraseña: ");
         String contraseña = sc.nextLine();
         
-        Identificacion(nombre, contraseña,sc);*/
+        Identificacion(nombre, contraseña,sc);
         
         cazar_Pokemon();
         

@@ -6,6 +6,7 @@ package pokemon_go;
 
 import Interfaces.Operaciones_basicas;
 import Objetos.Pokemon;
+import Persistencia.PersistenciaPokemon;
 import java.util.ArrayList;
 
 /**
@@ -27,6 +28,7 @@ public class DAOPokemon implements Operaciones_basicas{
     public ArrayList<Pokemon> getMochila() {
         return mochila;
     }
+
     
     
     

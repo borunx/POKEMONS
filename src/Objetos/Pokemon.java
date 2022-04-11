@@ -4,6 +4,7 @@
  */
 package Objetos;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.Random;
 
@@ -11,7 +12,7 @@ import java.util.Random;
  *
  * @author 34697
  */
-public class Pokemon {
+public class Pokemon implements Serializable{
     private String nombre;
     private int CP;
 

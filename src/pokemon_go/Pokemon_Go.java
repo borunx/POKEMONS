@@ -41,35 +41,33 @@ public class Pokemon_Go {
         String nombre = sc.nextLine();
         
         System.out.println("Contraseña: ");
-        String contraseña = sc.nextLine();
+        String contrasenya = sc.nextLine();
         
-        Identificacion(nombre, contraseña,sc);
+        Identificacion(nombre, contrasenya,sc);
         
         cazar_Pokemon();
         
     }
     
     //fase2y3
-    public void Identificacion(String nombre, String contraseña, Scanner sc){
+    public void Identificacion(String nombre, String contrasenya, Scanner sc){
         
         String ruta = "Usuarios/user_" + nombre + ".dat.txt";//En Windows si que importan las 
         //extensiones de los ficheros, por eso hay que añadir .txt
         
-        File fichero = new File(ruta); 
         try {
-            Scanner lectura = new Scanner(fichero);
+            String password = ValidarUsuario.LecturaFichero(ruta); 
+            //lee la linea del fichero y lo almacena en la variable password
             
-            if (fichero.exists()) {
-                System.out.println("Verifica la contraseña: ");
-                contraseña = sc.nextLine();
-                String password = lectura.nextLine();
-                if (contraseña.equals(password)) {
-                    System.out.println("Login correcto, Hola " + nombre + "!");
-                }
-                else
-                    System.out.println("Login incorrecto");
+            System.out.println("Verifica la contraseña: ");
+            contrasenya = sc.nextLine();
+            
+            if (ValidarUsuario.ValidarContrasenya(contrasenya, password)) {
+                //compara la linea del fichero con la contraseña introducida por el usuario
+                System.out.println("Login correcto, Hola " + nombre + "!");
             }
-            lectura.close();
+            else
+                System.out.println("Login incorrecto");
             
         } catch (FileNotFoundException ex) {
             System.out.println("No se ha encontrado el usuario");
@@ -77,10 +75,8 @@ public class Pokemon_Go {
             String creacion = sc.nextLine();
             if (creacion.equalsIgnoreCase("si")) {
                 try {
-                    FileWriter nuevo_usuario = new FileWriter(ruta);
-                    nuevo_usuario.write("" + contraseña);
-                    nuevo_usuario.close();
-                    
+                    ValidarUsuario.escribirContrasena(contrasenya, ruta);
+                    //si el usuario no existe, crea su fichero y inserta la contraseña dentro
                 } catch (IOException ex1) {
                     ex1.printStackTrace();
                 }
@@ -96,7 +92,7 @@ public class Pokemon_Go {
             Scanner lectura = new Scanner(new File("nombres.pok.txt"));
             while(lectura.hasNextLine()) {
                 String frase = lectura.nextLine();
-                poke_nombres.add(frase);
+                poke_nombres.add(frase); //cargar nombres en la arraylist
             }
             lectura.close();
             
@@ -108,7 +104,7 @@ public class Pokemon_Go {
         Random rd = new Random();
         int eleccion_pokemon = rd.nextInt(poke_nombres.size());
         
-        String nombre_pokemon_azar = poke_nombres.get(eleccion_pokemon);
+        String nombre_pokemon_azar = poke_nombres.get(eleccion_pokemon); //nombre al azar
         String ruta_pokemon = "PokeImagenes/" +nombre_pokemon_azar + ".pok.txt";
         
         //System.out.println(ruta_pokemon);
@@ -116,7 +112,7 @@ public class Pokemon_Go {
         poke_operaciones.cazar_pokemon(anyadir);//añadirlo a la mochila
         
         try {
-            PersistenciaPokemon.visualizarPokemon(ruta_pokemon);
+            PersistenciaPokemon.visualizarPokemon(ruta_pokemon); //mostrar ASCII-Pokemon
             System.out.println(nombre_pokemon_azar + " tiene un CP de " + anyadir.getCP());
             
         } catch (FileNotFoundException ex) {

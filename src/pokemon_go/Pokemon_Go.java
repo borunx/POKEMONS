@@ -36,6 +36,13 @@ public class Pokemon_Go {
         poke_operaciones = new DAOPokemon();
         Scanner sc = new Scanner (System.in);
         
+        try {
+            Logo.mostrarLogo();
+            
+        } catch (FileNotFoundException ex) {
+            System.out.println("No se ha encontrado el logo");
+        }
+        
         //login usuario, pedir datos
         System.out.println("Nombre de usuario: ");
         String nombre = sc.nextLine();
@@ -45,7 +52,16 @@ public class Pokemon_Go {
         
         Identificacion(nombre, contrasenya,sc);
         
-        cazar_Pokemon();
+        int opcion=sc.nextInt();
+        
+        switch (opcion){
+            case 1:
+                cazar_Pokemon();
+                break;                                                                                                                                
+            
+        }
+        
+        
         
     }
     

@@ -18,13 +18,10 @@ public class PersistenciaPokemon {
     
     public static void visualizarPokemon(String ruta) throws FileNotFoundException{
         
-        File visual_pokemon = new File(ruta);
-        
-        Scanner lectura = new Scanner(visual_pokemon);
+        Scanner lectura = new Scanner(new File(ruta));
 
         while(lectura.hasNextLine()){
-            String frase = lectura.nextLine();
-            System.out.println(frase);
+            System.out.println(lectura.nextLine());
         }
         lectura.close();
     }

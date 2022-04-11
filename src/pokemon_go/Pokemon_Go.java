@@ -28,21 +28,14 @@ public class Pokemon_Go {
     public static void main(String[] args) {
         Pokemon_Go app = new Pokemon_Go();
         
-        
-        
         app.lanzarApp();
-    }
-    
-    
-    public void mostrarMenu(){
-        //falta implementar
     }
     
     //correr el programa
     private void lanzarApp(){
         poke_operaciones = new DAOPokemon();
-        
         Scanner sc = new Scanner (System.in);
+        
         //login usuario, pedir datos
         System.out.println("Nombre de usuario: ");
         String nombre = sc.nextLine();
@@ -85,9 +78,7 @@ public class Pokemon_Go {
             if (creacion.equalsIgnoreCase("si")) {
                 try {
                     FileWriter nuevo_usuario = new FileWriter(ruta);
-                    
                     nuevo_usuario.write("" + contraseña);
-                    
                     nuevo_usuario.close();
                     
                 } catch (IOException ex1) {
@@ -96,15 +87,13 @@ public class Pokemon_Go {
             }
         }
     }
-    
+    //fase 5
     public void cazar_Pokemon(){
-        
-        File nombres_pok = new File("nombres.pok.txt");
         
         ArrayList<String> poke_nombres = new ArrayList<String>();
         
         try {
-            Scanner lectura = new Scanner(nombres_pok);
+            Scanner lectura = new Scanner(new File("nombres.pok.txt"));
             while(lectura.hasNextLine()) {
                 String frase = lectura.nextLine();
                 poke_nombres.add(frase);
@@ -117,20 +106,18 @@ public class Pokemon_Go {
         
         //System.out.println(poke_nombres.toString());
         Random rd = new Random();
-        
         int eleccion_pokemon = rd.nextInt(poke_nombres.size());
         
-        String pokemon_azar = poke_nombres.get(eleccion_pokemon);
-        
-        String ruta_pokemon = "PokeImagenes/" +pokemon_azar + ".pok.txt";
+        String nombre_pokemon_azar = poke_nombres.get(eleccion_pokemon);
+        String ruta_pokemon = "PokeImagenes/" +nombre_pokemon_azar + ".pok.txt";
         
         //System.out.println(ruta_pokemon);
-        Pokemon anyadir = new Pokemon(pokemon_azar); //crear pokemon
+        Pokemon anyadir = new Pokemon(nombre_pokemon_azar); //crear pokemon
         poke_operaciones.cazar_pokemon(anyadir);//añadirlo a la mochila
         
         try {
             PersistenciaPokemon.visualizarPokemon(ruta_pokemon);
-            System.out.println(pokemon_azar + " tiene un CP de " + anyadir.getCP());
+            System.out.println(nombre_pokemon_azar + " tiene un CP de " + anyadir.getCP());
             
         } catch (FileNotFoundException ex) {
             System.out.println("No se ha encontrado el fichero");

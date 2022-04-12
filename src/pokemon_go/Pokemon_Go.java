@@ -138,7 +138,7 @@ public class Pokemon_Go {
             System.out.println(nombre_pokemon_azar + " tiene un CP de " + anyadir.getCP());
             
         } catch (FileNotFoundException ex) {
-            System.out.println("No se ha encontrado el ficheros");
+            System.out.println("No se ha encontrado el fichero");
         }
         
         int num_adivinar = Aleatorios.generarNumAleatorio(anyadir.getCP());

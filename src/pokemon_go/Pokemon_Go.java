@@ -6,11 +6,16 @@ package pokemon_go;
 
 import Objetos.Pokemon;
 import Persistencia.PersistenciaPokemon;
+import Utilidades.Aleatorios;
+import Utilidades.CompararPokemons;
+import Utilidades.ValidarUsuarios;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import static java.util.Collections.list;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -45,14 +50,18 @@ public class Pokemon_Go {
         
         Identificacion(nombre, contrasenya,sc);
         
-        int opcion=sc.nextInt();
+        int opcion;
         
-        switch (opcion){
+        do {
+            mostrarMenu();
+            opcion=sc.nextInt();
+            switch (opcion){
             case 1:
-                cazar_Pokemon();
+                cazar_Pokemon(sc);
                 break;
             case 2:
-                System.out.println("No implementada");
+                listarPokemons();
+                //System.out.println("No implementada");
                 break; 
             case 3:
                 System.out.println("No implementada");
@@ -64,8 +73,8 @@ public class Pokemon_Go {
                 System.out.println("Fin de partida, hasta la proxima.");
                 break; 
             
-        }
-        
+            }
+        } while (opcion!=0);
     }
     
     //fase2y3
@@ -75,13 +84,10 @@ public class Pokemon_Go {
         //extensiones de los ficheros, por eso hay que añadir .txt
         
         try {
-            String password = ValidarUsuario.LecturaFichero(ruta); 
+            String password = ValidarUsuarios.LecturaFichero(ruta); 
             //lee la linea del fichero y lo almacena en la variable password
             
-            System.out.println("Verifica la contraseña: ");
-            contrasenya = sc.nextLine();
-            
-            if (ValidarUsuario.ValidarContrasenya(contrasenya, password)) {
+            if (ValidarUsuarios.ValidarContrasenya(contrasenya, password)) {
                 //compara la linea del fichero con la contraseña introducida por el usuario
                 System.out.println("Login correcto, Hola " + nombre + "!");
             }
@@ -94,7 +100,7 @@ public class Pokemon_Go {
             String creacion = sc.nextLine();
             if (creacion.equalsIgnoreCase("si")) {
                 try {
-                    ValidarUsuario.escribirContrasena(contrasenya, ruta);
+                    ValidarUsuarios.escribirContrasena(contrasenya, ruta);
                     //si el usuario no existe, crea su fichero y inserta la contraseña dentro
                 } catch (IOException ex1) {
                     ex1.printStackTrace();
@@ -103,7 +109,7 @@ public class Pokemon_Go {
         }
     }
     //fase 5
-    public void cazar_Pokemon(){
+    public void cazar_Pokemon(Scanner sc){
         
         ArrayList<String> poke_nombres = new ArrayList<String>();
         
@@ -112,23 +118,20 @@ public class Pokemon_Go {
             while(lectura.hasNextLine()) {
                 String frase = lectura.nextLine();
                 poke_nombres.add(frase); //cargar nombres en la arraylist
-            }
-            lectura.close();
+        }
+        lectura.close();
             
         } catch (FileNotFoundException e) {
             System.out.println("Fichero no encontrado");
         }
         
-        //System.out.println(poke_nombres.toString());
-        Random rd = new Random();
-        int eleccion_pokemon = rd.nextInt(poke_nombres.size());
+        int eleccion_pokemon = Aleatorios.aleatorioArray(poke_nombres);
         
         String nombre_pokemon_azar = poke_nombres.get(eleccion_pokemon); //nombre al azar
         String ruta_pokemon = "PokeImagenes/" +nombre_pokemon_azar + ".pok.txt";
         
         //System.out.println(ruta_pokemon);
         Pokemon anyadir = new Pokemon(nombre_pokemon_azar); //crear pokemon
-        poke_operaciones.cazar_pokemon(anyadir);//añadirlo a la mochila
         
         try {
             PersistenciaPokemon.visualizarPokemon(ruta_pokemon); //mostrar ASCII-Pokemon
@@ -137,8 +140,39 @@ public class Pokemon_Go {
         } catch (FileNotFoundException ex) {
             System.out.println("No se ha encontrado el ficheros");
         }
+        
+        int num_adivinar = Aleatorios.generarNumAleatorio(anyadir.getCP());
+        //System.out.println(num_adivinar);
+        
+        System.out.println("Adivina el numero entre 1 y " + anyadir.getCP()/10);
+        int num_secreto = sc.nextInt();
+        
+        if (num_secreto==num_adivinar) {
+            System.out.println("Muy bien, has capturado a " + anyadir.getNombre());
+            poke_operaciones.cazar_pokemon(anyadir);//añadirlo a la mochila
+        }
+        else
+            System.out.println(anyadir.getNombre() + " se ha escapado");
+        
     }
     
+    public void listarPokemons() {
+        //fase 8
+        Collections.sort(poke_operaciones.getMochila(), new CompararPokemons());
+        
+        //fase 6
+        
+    }
     
+    private void mostrarMenu() {
+        System.out.println("1. Cazar Pokemon");
+        System.out.println("2. Ver Pokemons");
+        System.out.println("3. Transferir Pokemon");
+        System.out.println("4. Recibir Pokemon");
+        System.out.println("0. Salir");
+        System.out.print("Opcion: ");
+    }
     
 }
+
+

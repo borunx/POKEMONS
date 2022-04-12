@@ -60,7 +60,7 @@ public class Pokemon_Go {
                 cazar_Pokemon(sc);
                 break;
             case 2:
-                listarPokemons();
+                VerPokemons();
                 //System.out.println("No implementada");
                 break; 
             case 3:
@@ -156,7 +156,7 @@ public class Pokemon_Go {
         
     }
     
-    public void listarPokemons() {
+    public void VerPokemons() {
         //fase 8
         Collections.sort(poke_operaciones.getMochila(), new CompararPokemons());
         

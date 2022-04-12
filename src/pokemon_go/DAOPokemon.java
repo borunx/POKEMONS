@@ -29,6 +29,14 @@ public class DAOPokemon implements Operaciones_basicas{
         return mochila;
     }
 
+    @Override
+    public ArrayList<Pokemon> listar_pokemons() {
+        return getMochila();
+    }
+    
+    public int TamanyoMochila(){
+        return mochila.size();
+    }
     
     
     

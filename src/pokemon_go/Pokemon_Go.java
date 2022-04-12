@@ -135,7 +135,7 @@ public class Pokemon_Go {
             System.out.println(nombre_pokemon_azar + " tiene un CP de " + anyadir.getCP());
             
         } catch (FileNotFoundException ex) {
-            System.out.println("No se ha encontrado el fichero");
+            System.out.println("No se ha encontrado el ficheros");
         }
     }
     

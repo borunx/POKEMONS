@@ -48,8 +48,6 @@ public class PersistenciaPokemon {
     
     public static boolean Borrar_Usuario(String nombre) {
         
-        Scanner sc = new Scanner (System.in);
-        
         String ruta_usuario = ValidarUsuarios.ruta_Usuario(nombre);
         String ruta_mochila = ValidarUsuarios.ruta_Mochila(nombre);
         

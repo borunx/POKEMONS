@@ -67,4 +67,12 @@ public class PersistenciaPokemon {
         else
             return false;        
     }
+    
+    public static void Guardar_Transferencia(Pokemon poke, String receptor_transferencia) {
+        
+    }
+    
+    //public static Pokemon Recibir_Transferencia(){
+        
+    //}
 }

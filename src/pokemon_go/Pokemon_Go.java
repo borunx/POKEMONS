@@ -64,13 +64,19 @@ public class Pokemon_Go {
                 //System.out.println("No implementada");
                 break; 
             case 3:
-                System.out.println("No implementada");
+                TransferirPokemon();
+                //System.out.println("No implementada");
                 break; 
             case 4:
-                System.out.println("No implementada");
+                RecibirPokemon();
+                //System.out.println("No implementada");
                 break; 
             case 5:
                 BorrarUsuario(nombre);
+                //System.out.println("No implementada");
+                break; 
+            case 6:
+                Historial_jugadores();
                 //System.out.println("No implementada");
                 break; 
             case 0:
@@ -197,12 +203,48 @@ public class Pokemon_Go {
         return borrar_usuario;
     }
     
+    //fase 9
+    public void TransferirPokemon() {
+        Scanner sc = new Scanner (System.in);
+        System.out.println("Que pokemon quieres transferir?");
+        String pokemon = sc.nextLine();
+        
+        Pokemon prueba = new Pokemon(pokemon);
+        
+        if (poke_operaciones.getMochila().contains(prueba)) {
+            System.out.println("Que usuario recibira el pokemon?");
+            String nombre_receptor = sc.nextLine();
+        }
+    }
+    
+    public void RecibirPokemon() {
+        
+    }
+    
+    //fase 13 - Jonatan
+    public void Historial_jugadores() {
+        String ruta_mochila = "Mochilas";
+        File mochila = new File(ruta_mochila);
+        
+        File[] jugadores;
+        if(mochila.exists()) {
+            if(mochila.isDirectory()) {
+                jugadores = mochila.listFiles();
+                System.out.println("Historial de jugadores:");
+                for(int i=0; i<jugadores.length; i++) {
+                    System.out.println(jugadores[i].getName().replace("_mochila.dat.txt", ""));
+                }
+            }
+        }
+    }
+    
     private void mostrarMenu() {
         System.out.println("1. Cazar Pokemon");
         System.out.println("2. Ver Pokemons");
         System.out.println("3. Transferir Pokemon");
         System.out.println("4. Recibir Pokemon");
         System.out.println("5. Borrar Usuario");
+        System.out.println("6. Historial de jugadores");
         System.out.println("0. Salir");
         System.out.print("Opcion: ");
     }

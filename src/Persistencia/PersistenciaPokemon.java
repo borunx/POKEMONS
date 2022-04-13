@@ -5,6 +5,7 @@
 package Persistencia;
 
 import Objetos.Pokemon;
+import Utilidades.ValidarUsuarios;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -33,9 +34,9 @@ public class PersistenciaPokemon {
     
     public static ArrayList<Pokemon> Guardar_Pokemons(String nombre_usuario, ArrayList<Pokemon> mochila) throws FileNotFoundException, IOException{
         
-        String ruta = "Mochilas/" + nombre_usuario + "_mochila.dat";
+        String ruta_mochila = ValidarUsuarios.ruta_Mochila(nombre_usuario);
         
-        FileOutputStream escribir = new FileOutputStream(ruta);
+        FileOutputStream escribir = new FileOutputStream(ruta_mochila);
         
         ObjectOutputStream pokeDatos = new ObjectOutputStream(escribir);
         
@@ -43,5 +44,29 @@ public class PersistenciaPokemon {
         
         return mochila;
         
+    }
+    
+    public static boolean Borrar_Usuario(String nombre) {
+        
+        Scanner sc = new Scanner (System.in);
+        
+        String ruta_usuario = ValidarUsuarios.ruta_Usuario(nombre);
+        String ruta_mochila = ValidarUsuarios.ruta_Mochila(nombre);
+        
+        File usuario = new File(ruta_usuario);
+        File mochila = new File(ruta_mochila);
+        
+        
+        if (usuario.exists() && mochila.exists()) {
+            usuario.delete();
+            mochila.delete();
+            return true;
+        }
+        else if (usuario.exists() && !mochila.exists()) {
+            usuario.delete();
+            return true;
+        }
+        else
+            return false;        
     }
 }

@@ -43,4 +43,19 @@ public class ValidarUsuarios {
         nuevo_usuario.close();
         
     }
+    
+    public static String ruta_Usuario(String nombre) {
+        
+        String ruta_Usuario = "Usuarios/user_" + nombre + ".dat.txt"; //Devuelve
+        //ruta de los usuarios
+        
+        return ruta_Usuario;
+    }
+    
+    public static String ruta_Mochila(String nombre) {
+        String ruta_Mochila = "Mochilas/" + nombre + "_mochila.dat";//Crear
+        //ruta de las mochilas
+        
+        return ruta_Mochila;
+    }
 }

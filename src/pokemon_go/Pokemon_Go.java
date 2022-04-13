@@ -69,6 +69,10 @@ public class Pokemon_Go {
             case 4:
                 System.out.println("No implementada");
                 break; 
+            case 5:
+                BorrarUsuario(nombre);
+                //System.out.println("No implementada");
+                break; 
             case 0:
                 System.out.println("Fin de partida, hasta la proxima.");
                 break; 
@@ -80,11 +84,11 @@ public class Pokemon_Go {
     //fase2y3
     public void Identificacion(String nombre, String contrasenya, Scanner sc){
         
-        String ruta = "Usuarios/user_" + nombre + ".dat.txt";//En Windows si que importan las 
+        String ruta_usuario = ValidarUsuarios.ruta_Usuario(nombre);//En Windows si que importan las 
         //extensiones de los ficheros, por eso hay que añadir .txt
         
         try {
-            String password = ValidarUsuarios.LecturaFichero(ruta); 
+            String password = ValidarUsuarios.LecturaFichero(ruta_usuario); 
             //lee la linea del fichero y lo almacena en la variable password
             
             if (ValidarUsuarios.ValidarContrasenya(contrasenya, password)) {
@@ -100,8 +104,9 @@ public class Pokemon_Go {
             String creacion = sc.nextLine();
             if (creacion.equalsIgnoreCase("si")) {
                 try {
-                    ValidarUsuarios.escribirContrasena(contrasenya, ruta);
+                    ValidarUsuarios.escribirContrasena(contrasenya, ruta_usuario);
                     //si el usuario no existe, crea su fichero y inserta la contraseña dentro
+                    System.out.println("Usuario " + nombre + " creado correctamente");
                 } catch (IOException ex1) {
                     ex1.printStackTrace();
                 }
@@ -111,7 +116,7 @@ public class Pokemon_Go {
     //fase 5
     public void cazar_Pokemon(Scanner sc){
         
-        ArrayList<String> poke_nombres = new ArrayList<String>();
+        ArrayList<String> poke_nombres = new ArrayList<>();
         
         try {
             Scanner lectura = new Scanner(new File("nombres.pok.txt"));
@@ -164,11 +169,40 @@ public class Pokemon_Go {
         
     }
     
+    //fase 11 - Jonatan
+    public boolean BorrarUsuario(String nombre) {
+        Scanner sc = new Scanner (System.in);
+        boolean borrar_usuario;
+        System.out.println("IMPORTANTE! Se borrará este usuario y su mochila");
+        System.out.println("Desea continuar?");
+        String confirmacion= sc.nextLine();
+        
+        if (confirmacion.equalsIgnoreCase("si")) {
+            boolean borrado = PersistenciaPokemon.Borrar_Usuario(nombre);
+
+            if (borrado) {
+                System.out.println("Se ha borrado el usuario correctamente");
+                System.out.println("Cerrando sesión...");
+                borrar_usuario = true;
+                System.exit(0);
+            }
+            else
+                System.out.println("Error, el usuario no puede ser borrado");
+                borrar_usuario = false;
+        }
+        else{
+            System.out.println("Cancelando...");
+            borrar_usuario = false;
+        }
+        return borrar_usuario;
+    }
+    
     private void mostrarMenu() {
         System.out.println("1. Cazar Pokemon");
         System.out.println("2. Ver Pokemons");
         System.out.println("3. Transferir Pokemon");
         System.out.println("4. Recibir Pokemon");
+        System.out.println("5. Borrar Usuario");
         System.out.println("0. Salir");
         System.out.print("Opcion: ");
     }

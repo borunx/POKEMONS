@@ -18,6 +18,8 @@ import java.util.Collections;
 import static java.util.Collections.list;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -110,7 +112,7 @@ public class Pokemon_Go {
             String creacion = sc.nextLine();
             if (creacion.equalsIgnoreCase("si")) {
                 try {
-                    ValidarUsuarios.escribirContrasena(contrasenya, ruta_usuario);
+                    ValidarUsuarios.escribirFichero(contrasenya, ruta_usuario);
                     //si el usuario no existe, crea su fichero y inserta la contraseña dentro
                     System.out.println("Usuario " + nombre + " creado correctamente");
                 } catch (IOException ex1) {
@@ -172,14 +174,19 @@ public class Pokemon_Go {
         Collections.sort(poke_operaciones.getMochila(), new CompararPokemons());
         
         //fase 6
-        
+        if (poke_operaciones.TamanyoMochila()==0) {
+            System.out.println("No tienes Pokemons en la mochila");
+        }
+        else {
+            
+        }
     }
     
     //fase 11 - Jonatan
     public boolean BorrarUsuario(String nombre) {
         Scanner sc = new Scanner (System.in);
         boolean borrar_usuario;
-        System.out.println("IMPORTANTE! Se borrará este usuario y su mochila");
+        System.out.println("IMPORTANTE! Se borrará este usuario permanentemente");
         System.out.println("Desea continuar?");
         String confirmacion= sc.nextLine();
         
@@ -221,21 +228,36 @@ public class Pokemon_Go {
         
     }
     
-    //fase 13 - Jonatan
+    //fase 13 - Jonatan, almacenar un historial de jugadores en un fichero
+    
+    /*
+    leer mochila
+    guardar entradas de mochila y escribirlas en historial_jugadores
+    si el jugador ya esta no introducirlo
+    leer y mostrar los jugadores del fichero
+    remplazar, para solo mostrar el nombre
+    */
     public void Historial_jugadores() {
         String ruta_mochila = "Mochilas";
         File mochila = new File(ruta_mochila);
+        File historial_jugadores = new File("Historial_jugadores.txt");
         
-        File[] jugadores;
-        if(mochila.exists()) {
-            if(mochila.isDirectory()) {
-                jugadores = mochila.listFiles();
-                System.out.println("Historial de jugadores:");
-                for(int i=0; i<jugadores.length; i++) {
-                    System.out.println(jugadores[i].getName().replace("_mochila.dat.txt", ""));
+        try {
+            FileWriter historial = new FileWriter(historial_jugadores, true);
+            System.out.println("Historial de jugadores:");
+            for (File file : mochila.listFiles()) {
+                if (!file.isDirectory()) {
+                    String jugador = file.getName().replace("_mochila.dat.txt", "").toUpperCase();
+                    System.out.println(" " + jugador);
+                    historial.write("" + jugador + "\r\n");
                 }
             }
+            historial.close();
+            
+        } catch (IOException ex) {
+            System.out.println("Ha ocurrido un error en el historial");
         }
+        
     }
     
     private void mostrarMenu() {

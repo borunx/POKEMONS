@@ -49,23 +49,15 @@ public class PersistenciaPokemon {
     public static boolean Borrar_Usuario(String nombre) {
         
         String ruta_usuario = ValidarUsuarios.ruta_Usuario(nombre);
-        String ruta_mochila = ValidarUsuarios.ruta_Mochila(nombre);
         
         File usuario = new File(ruta_usuario);
-        File mochila = new File(ruta_mochila);
         
-        
-        if (usuario.exists() && mochila.exists()) {
-            usuario.delete();
-            mochila.delete();
-            return true;
-        }
-        else if (usuario.exists() && !mochila.exists()) {
+        if (usuario.exists()) {
             usuario.delete();
             return true;
         }
         else
-            return false;        
+            return false;
     }
     
     public static void Guardar_Transferencia(Pokemon poke, String receptor_transferencia) {

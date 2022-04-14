@@ -35,12 +35,12 @@ public class ValidarUsuarios {
             return false;
     }
     
-    public static void escribirContrasena(String contrasenya, String ruta) throws IOException{
-        FileWriter nuevo_usuario = new FileWriter(ruta);
+    public static void escribirFichero(String entrada, String ruta) throws IOException{
+        FileWriter nueva_entrada = new FileWriter(ruta);
         
-        nuevo_usuario.write("" + contrasenya);
+        nueva_entrada.write("" + entrada);
         
-        nuevo_usuario.close();
+        nueva_entrada.close();
         
     }
     

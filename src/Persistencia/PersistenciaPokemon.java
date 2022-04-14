@@ -7,6 +7,7 @@ package Persistencia;
 import Objetos.Pokemon;
 import Utilidades.ValidarUsuarios;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -32,7 +33,7 @@ public class PersistenciaPokemon {
         lectura.close();
     }
     
-    public static ArrayList<Pokemon> Guardar_Pokemons(String nombre_usuario, ArrayList<Pokemon> mochila) throws FileNotFoundException, IOException{
+    public static void Guardar_Pokemons(String nombre_usuario, ArrayList<Pokemon> mochila) throws FileNotFoundException, IOException{
         
         String ruta_mochila = ValidarUsuarios.ruta_Mochila(nombre_usuario);
         
@@ -42,7 +43,10 @@ public class PersistenciaPokemon {
         
         pokeDatos.writeObject(mochila);
         
-        return mochila;
+        pokeDatos.close();
+    }
+    
+    public static void Recuperar_Pokemons(String nombre_usuario, ArrayList<Pokemon> mochila) throws FileNotFoundException{
         
     }
     

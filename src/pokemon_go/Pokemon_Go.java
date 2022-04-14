@@ -43,6 +43,8 @@ public class Pokemon_Go {
         poke_operaciones = new DAOPokemon();
         Scanner sc = new Scanner (System.in);
         
+        //mostrarLogo
+        
         //login usuario, pedir datos
         System.out.println("Nombre de usuario: ");
         String nombre = sc.nextLine();
@@ -50,48 +52,44 @@ public class Pokemon_Go {
         System.out.println("Contraseña: ");
         String contrasenya = sc.nextLine();
         
-        Identificacion(nombre, contrasenya,sc);
+        boolean lanzar_programa=Identificacion(nombre, contrasenya,sc);
         
-        int opcion;
+        if (lanzar_programa) {
+            //poke_operaciones.cargarMochila(); //(fase 5c) falta poner los pokemons de user_mochila.dat en la mochila
+            int opcion;
         
-        do {
-            mostrarMenu();
-            opcion=sc.nextInt();
-            switch (opcion){
-            case 1:
-                cazar_Pokemon(sc);
-                break;
-            case 2:
-                VerPokemons();
-                //System.out.println("No implementada");
-                break; 
-            case 3:
-                TransferirPokemon();
-                //System.out.println("No implementada");
-                break; 
-            case 4:
-                RecibirPokemon();
-                //System.out.println("No implementada");
-                break; 
-            case 5:
-                BorrarUsuario(nombre);
-                //System.out.println("No implementada");
-                break; 
-            case 6:
-                Historial_jugadores();
-                //System.out.println("No implementada");
-                break; 
-            case 0:
-                System.out.println("Fin de partida, hasta la proxima.");
-                break; 
-            
-            }
-        } while (opcion!=0);
+            do {
+                mostrarMenu();
+                opcion=sc.nextInt();
+                switch (opcion){
+                case 1:
+                    cazar_Pokemon(sc);
+                    break;
+                case 2:
+                    VerPokemons();
+                    //System.out.println("No implementada");
+                    break; 
+                case 3:
+                    TransferirPokemon();
+                    //System.out.println("No implementada");
+                    break; 
+                case 4:
+                    RecibirPokemon();
+                    //System.out.println("No implementada");
+                    break; 
+                case 0:
+                    Salir(nombre);
+                    break; 
+
+                }
+            } while (opcion!=0);
+        }
+        
     }
     
     //fase2y3
-    public void Identificacion(String nombre, String contrasenya, Scanner sc){
-        
+    public boolean Identificacion(String nombre, String contrasenya, Scanner sc){
+        boolean acceso_usuario=false;
         String ruta_usuario = ValidarUsuarios.ruta_Usuario(nombre);//En Windows si que importan las 
         //extensiones de los ficheros, por eso hay que añadir .txt
         
@@ -102,9 +100,13 @@ public class Pokemon_Go {
             if (ValidarUsuarios.ValidarContrasenya(contrasenya, password)) {
                 //compara la linea del fichero con la contraseña introducida por el usuario
                 System.out.println("Login correcto, Hola " + nombre + "!");
+                acceso_usuario=true;
             }
-            else
+            else{
                 System.out.println("Login incorrecto");
+                acceso_usuario=false;
+            }
+                
             
         } catch (FileNotFoundException ex) {
             System.out.println("No se ha encontrado el usuario");
@@ -115,11 +117,17 @@ public class Pokemon_Go {
                     ValidarUsuarios.escribirFichero(contrasenya, ruta_usuario);
                     //si el usuario no existe, crea su fichero y inserta la contraseña dentro
                     System.out.println("Usuario " + nombre + " creado correctamente");
+                    acceso_usuario=true;
                 } catch (IOException ex1) {
                     ex1.printStackTrace();
                 }
             }
+            else{
+                System.out.println("Saliendo...");
+                acceso_usuario=false;
+            }
         }
+        return acceso_usuario;
     }
     //fase 5
     public void cazar_Pokemon(Scanner sc){
@@ -155,7 +163,7 @@ public class Pokemon_Go {
         }
         
         int num_adivinar = Aleatorios.generarNumAleatorio(anyadir.getCP());
-        //System.out.println(num_adivinar);
+        System.out.println(num_adivinar);
         
         System.out.println("Adivina el numero entre 1 y " + anyadir.getCP()/10);
         int num_secreto = sc.nextInt();
@@ -169,6 +177,23 @@ public class Pokemon_Go {
         
     }
     
+    //fase 5c
+    public void Salir(String nombre){
+        try {
+            if (!(poke_operaciones.getMochila().isEmpty())) {
+                PersistenciaPokemon.Guardar_Pokemons(nombre,poke_operaciones.getMochila());
+                System.out.println("Guardando pokemons...");
+            }
+            else
+                System.out.println("Cancelando guardado, la mochila esta vacia");
+            
+            System.out.println("Fin de partida, hasta la proxima!");
+            
+        } catch (IOException ex) {
+            System.out.println("Ha ocurrido un error al guardar los pokemons.");
+        }
+    }
+    
     public void VerPokemons() {
         //fase 8
         Collections.sort(poke_operaciones.getMochila(), new CompararPokemons());
@@ -180,34 +205,6 @@ public class Pokemon_Go {
         else {
             
         }
-    }
-    
-    //fase 11 - Jonatan
-    public boolean BorrarUsuario(String nombre) {
-        Scanner sc = new Scanner (System.in);
-        boolean borrar_usuario;
-        System.out.println("IMPORTANTE! Se borrará este usuario permanentemente");
-        System.out.println("Desea continuar?");
-        String confirmacion= sc.nextLine();
-        
-        if (confirmacion.equalsIgnoreCase("si")) {
-            boolean borrado = PersistenciaPokemon.Borrar_Usuario(nombre);
-
-            if (borrado) {
-                System.out.println("Se ha borrado el usuario correctamente");
-                System.out.println("Cerrando sesión...");
-                borrar_usuario = true;
-                System.exit(0);
-            }
-            else
-                System.out.println("Error, el usuario no puede ser borrado");
-                borrar_usuario = false;
-        }
-        else{
-            System.out.println("Cancelando...");
-            borrar_usuario = false;
-        }
-        return borrar_usuario;
     }
     
     //fase 9
@@ -228,45 +225,11 @@ public class Pokemon_Go {
         
     }
     
-    //fase 13 - Jonatan, almacenar un historial de jugadores en un fichero
-    
-    /*
-    leer mochila
-    guardar entradas de mochila y escribirlas en historial_jugadores
-    si el jugador ya esta no introducirlo
-    leer y mostrar los jugadores del fichero
-    remplazar, para solo mostrar el nombre
-    */
-    public void Historial_jugadores() {
-        String ruta_mochila = "Mochilas";
-        File mochila = new File(ruta_mochila);
-        File historial_jugadores = new File("Historial_jugadores.txt");
-        
-        try {
-            FileWriter historial = new FileWriter(historial_jugadores, true);
-            System.out.println("Historial de jugadores:");
-            for (File file : mochila.listFiles()) {
-                if (!file.isDirectory()) {
-                    String jugador = file.getName().replace("_mochila.dat.txt", "").toUpperCase();
-                    System.out.println(" " + jugador);
-                    historial.write("" + jugador + "\r\n");
-                }
-            }
-            historial.close();
-            
-        } catch (IOException ex) {
-            System.out.println("Ha ocurrido un error en el historial");
-        }
-        
-    }
-    
     private void mostrarMenu() {
         System.out.println("1. Cazar Pokemon");
         System.out.println("2. Ver Pokemons");
         System.out.println("3. Transferir Pokemon");
         System.out.println("4. Recibir Pokemon");
-        System.out.println("5. Borrar Usuario");
-        System.out.println("6. Historial de jugadores");
         System.out.println("0. Salir");
         System.out.print("Opcion: ");
     }

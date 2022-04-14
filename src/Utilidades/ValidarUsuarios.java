@@ -53,7 +53,7 @@ public class ValidarUsuarios {
     }
     
     public static String ruta_Mochila(String nombre) {
-        String ruta_Mochila = "Mochilas/" + nombre + "_mochila.dat";//Crear
+        String ruta_Mochila = "Mochilas/" + nombre + "_mochila.dat.txt";//Crear
         //ruta de las mochilas
         
         return ruta_Mochila;

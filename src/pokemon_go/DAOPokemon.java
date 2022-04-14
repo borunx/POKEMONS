@@ -38,6 +38,9 @@ public class DAOPokemon implements Operaciones_basicas{
         return mochila.size();
     }
     
+    public void cargarMochila() {
+        
+    }
     
     
 }

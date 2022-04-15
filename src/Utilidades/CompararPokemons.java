@@ -13,7 +13,7 @@ import java.util.Comparator;
  */
 public class CompararPokemons implements Comparator<Pokemon>{
     
-    //fase 8s
+    //fase 8
     @Override
     public int compare(Pokemon o1, Pokemon o2) {
         int resultado = o1.getNombre().compareTo(o2.getNombre());

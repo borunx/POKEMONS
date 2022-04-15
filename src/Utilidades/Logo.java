@@ -18,11 +18,11 @@ public class Logo {
     public static void mostrarLogo(){
         File logo = new File("PokeImagenes/logo.pok.txt"); 
         try {
-            Scanner sc_fitxer = new Scanner(logo);
-            while (sc_fitxer.hasNext()) {
-                 System.out.println(sc_fitxer.nextLine());
+            Scanner leer_logo = new Scanner(logo);
+            while (leer_logo.hasNext()) {
+                 System.out.println(leer_logo.nextLine());
             }
-            sc_fitxer.close();
+            leer_logo.close();
             System.out.println("");
         } catch (FileNotFoundException ex) {
             System.out.println(ex.getMessage());

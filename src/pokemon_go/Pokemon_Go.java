@@ -12,17 +12,10 @@ import Utilidades.Logo;
 import Utilidades.ValidarUsuarios;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import static java.util.Collections.list;
-import java.util.Random;
 import java.util.Scanner;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -68,20 +61,19 @@ public class Pokemon_Go {
                     break;
                 case 2:
                     VerPokemons();
-                    //System.out.println("No implementada");
+                    System.out.println("No implementada");
                     break; 
                 case 3:
                     TransferirPokemon();
-                    //System.out.println("No implementada");
+                    System.out.println("No implementada");
                     break; 
                 case 4:
                     RecibirPokemon();
-                    //System.out.println("No implementada");
+                    System.out.println("No implementada");
                     break; 
                 case 0:
                     Salir(nombre);
                     break; 
-
                 }
             } while (opcion!=0);
         }
@@ -234,7 +226,6 @@ public class Pokemon_Go {
         System.out.println("0. Salir");
         System.out.print("Opcion: ");
     }
-    
 }
 
 

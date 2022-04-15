@@ -58,4 +58,11 @@ public class ValidarUsuarios {
         
         return ruta_Mochila;
     }
+    
+    public static String ruta_Mochila_J(String nombre) {
+        String ruta_JMochila = "Mochilas/" + nombre + "_jmochila.json";//Crear
+        //ruta de las mochilas en formato json
+        
+        return ruta_JMochila;
+    }
 }

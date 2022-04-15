@@ -41,6 +41,15 @@ public class DAOPokemon implements Operaciones_basicas{
     public void cargarMochila() {
         
     }
+
+    @Override
+    public int transferir_pokemon() {
+        return 0;
+    }
+
+    @Override
+    public void recibir_pokemon() {
+    }
     
     
 }

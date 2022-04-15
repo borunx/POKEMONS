@@ -8,6 +8,7 @@ import Objetos.Pokemon;
 import Persistencia.PersistenciaPokemon;
 import Utilidades.Aleatorios;
 import Utilidades.CompararPokemons;
+import Utilidades.Logo;
 import Utilidades.ValidarUsuarios;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -44,7 +45,7 @@ public class Pokemon_Go {
         Scanner sc = new Scanner (System.in);
         
         //mostrarLogo
-        
+        Logo.mostrarLogo();
         //login usuario, pedir datos
         System.out.println("Nombre de usuario: ");
         String nombre = sc.nextLine();

@@ -7,6 +7,8 @@ package pokemon_go;
 import Interfaces.Operaciones_basicas;
 import Objetos.Pokemon;
 import Persistencia.PersistenciaPokemon;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -34,12 +36,12 @@ public class DAOPokemon implements Operaciones_basicas{
         return getMochila();
     }
     
-    public int TamanyoMochila(){
+    public int ItemsMochila(){
         return mochila.size();
     }
     
-    public void cargarMochila() {
-        
+    public void cargarMochila(String nombre) throws IOException, FileNotFoundException, ClassNotFoundException {
+        mochila = PersistenciaPokemon.Recuperar_Pokemons(nombre, mochila);
     }
 
     @Override

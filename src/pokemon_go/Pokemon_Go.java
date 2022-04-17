@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -43,7 +45,7 @@ public class Pokemon_Go {
             String passwordUsuario = ValidarUsuarios.LecturaPassword(rutaUsuario);
             
             if (ValidarUsuarios.ValidarPassword(contrasenya, passwordUsuario)) {
-                System.out.println("Login correcto, Hola " + nombre + "!");
+                System.out.println("Login correcto, Hola " + nombre.toUpperCase() + "!");
                 accesoUsuario = true;
             }
             else{
@@ -76,7 +78,7 @@ public class Pokemon_Go {
     public void crearUsuario(String nombre, String contrasenya, String rutaUsuario) throws IOException{
         
         ValidarUsuarios.EscribirPassword(contrasenya, rutaUsuario);
-        System.out.println("Usuario " + nombre + " creado correctamente");
+        System.out.println("Usuario " + nombre.toUpperCase() + " creado correctamente");
         
     }
     
@@ -85,17 +87,8 @@ public class Pokemon_Go {
         Scanner sc = new Scanner(System.in);
         ArrayList<String> pokeNombres = new ArrayList<>();
         
-        try {
-            Scanner leerNombres = new Scanner(new File("nombres.pok.txt"));
-            while(leerNombres.hasNextLine()) {
-                String frase = leerNombres.nextLine();
-                pokeNombres.add(frase);
-        }
-        leerNombres.close();
-            
-        } catch (FileNotFoundException e) {
-            System.out.println("Fichero no encontrado");
-        }
+        File nombrePokemons = new File("nombres.pok.txt");
+        pokeNombres = cargarNombres(pokeNombres, nombrePokemons);
         
         int eleccion_pokemon = Aleatorios.aleatorioArray(pokeNombres);
         
@@ -106,7 +99,7 @@ public class Pokemon_Go {
         
         try {
             PersistenciaPokemon.visualizarPokemon(rutaPokemon);
-            System.out.println(pokemonAleatorio + " tiene un CP de " + anyadir.getCP());
+            System.out.println(pokemonAleatorio.toUpperCase() + " tiene un CP de " + anyadir.getCP());
             
         } catch (FileNotFoundException ex) {
             System.out.println("No se ha encontrado el fichero del pokemon");
@@ -115,7 +108,7 @@ public class Pokemon_Go {
         //fase 10
         if(poke_operaciones.existenciaPokemon(anyadir)){
             
-            System.out.println("Ya tienes a " + anyadir.getNombre());
+            System.out.println("Ya tienes a " + anyadir.getNombre().toUpperCase());
             System.out.println("Deseas volver a cazarlo? ");
             String cazar_de_nuevo =sc.nextLine();
             
@@ -131,6 +124,21 @@ public class Pokemon_Go {
         
     }
     
+    public ArrayList<String> cargarNombres(ArrayList<String> nombres, File ruta){
+        try {
+            Scanner leerNombres = new Scanner(ruta);
+            while(leerNombres.hasNextLine()) {
+                String frase = leerNombres.nextLine();
+                nombres.add(frase);
+        }
+        leerNombres.close();
+            
+        } catch (FileNotFoundException e) {
+            System.out.println("Fichero no encontrado");
+        }
+        return nombres;
+    }
+    
     //fase 7
     public void AdivinarNumPokemon(Pokemon anyadir, Scanner sc){
             int numOCulto = Aleatorios.generarNumAleatorio(anyadir.getCP());
@@ -141,11 +149,11 @@ public class Pokemon_Go {
         
             if (intento==numOCulto) {
                 
-                System.out.println("Muy bien, has capturado a " + anyadir.getNombre());
+                System.out.println("Muy bien, has capturado a " + anyadir.getNombre().toUpperCase());
                 poke_operaciones.cazarPokemon(anyadir);
             }
             else
-                System.out.println(anyadir.getNombre() + " se ha escapado");
+                System.out.println(anyadir.getNombre().toUpperCase() + " se ha escapado");
     }
     
     public void recuperarPokemons(String nombre){
@@ -262,10 +270,10 @@ public class Pokemon_Go {
         System.out.println("2. Ver Pokemons");
         System.out.println("3. Transferir Pokemon");
         System.out.println("4. Recibir Pokemon");
+        System.out.println("5. ");
         System.out.println("0. Salir");
         System.out.print("Opcion: ");
     }
-    
     
     //lanzarApp
     private void lanzarApp(){
@@ -307,6 +315,9 @@ public class Pokemon_Go {
                 case 4:
                     RecibirPokemon(nombreUsuario);
                     break; 
+                case 5:
+                    System.out.println("no implementada");
+                    break;
                 case 0:
                     Salir(nombreUsuario);
                     break;

@@ -173,26 +173,6 @@ public class Pokemon_Go {
         }
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     //fase 9
     public void TransferirPokemon() {
         Scanner sc = new Scanner (System.in);
@@ -205,67 +185,60 @@ public class Pokemon_Go {
         Pokemon comprobar_existencia = new Pokemon(pokemon_transferido);
         
         if (poke_operaciones.getMochila().indexOf(comprobar_existencia)!=-1) {
-            //System.out.println("el pokemon existe");
-            //System.out.println(poke_operaciones.getMochila().indexOf(comprobar_existencia));
             int posicion_pokemon = poke_operaciones.getMochila().indexOf(comprobar_existencia);
             System.out.println("A que usuario quiere transferir el pokemon:");
             String receptor_transferencia = sc.nextLine();
-            try {
-                PersistenciaPokemon.GuardarTransferencia(poke_operaciones.getMochila().get(posicion_pokemon), receptor_transferencia);
-                poke_operaciones.getMochila().remove(posicion_pokemon);
-            } catch (IOException ex) {
-                System.out.println("No se ha podido guardar el pokemon");
+            
+            if (ValidarUsuarios.existenciaUsuario(receptor_transferencia)) {
+                crearTransferencia(receptor_transferencia, posicion_pokemon);
+            }
+            else{
+                System.out.println("El usuario no existe, transferir de todos modos?");
+                String aceptarTransferencia = sc.nextLine();
+                
+                if (aceptarTransferencia.equalsIgnoreCase("si")) {
+                    crearTransferencia(receptor_transferencia, posicion_pokemon);
+                }
+                else
+                    System.out.println("Cancelando transferencia...");
             }
         }
         else
             System.out.println("No tienes el pokemon");
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    public void crearTransferencia(String receptor_transferencia, int posicion_pokemon){
+        try {
+            PersistenciaPokemon.GuardarTransferencia(poke_operaciones.getMochila().get(posicion_pokemon), receptor_transferencia);
+            poke_operaciones.getMochila().remove(posicion_pokemon);
+            System.out.println("Pokemon transferido a " + receptor_transferencia + " con exito");
+            
+        } catch (IOException ex) {
+            System.out.println("No se ha podido transferir el pokemon");
+        }
+    }
     
     public void RecibirPokemon(String nombre) {
         try {
             Pokemon pokemon_recibido = PersistenciaPokemon.RecibirTransferencia(nombre);
             poke_operaciones.getMochila().add(pokemon_recibido);
+            System.out.println("Pokemon transferido a la mochila con exito");
             
-            File transferencia = new File("Transferencias/transfer_" + nombre);
+            File transferencia = new File(Rutas.rutaTransferencia(nombre));
+            if (transferencia.exists()) {
+                System.out.println("Existe");
+            }
             transferencia.delete();
             
         } catch (IOException ex) {
-            System.out.println("Error al recibir pokemon");
+            System.out.println("No tienes ninguna transferencia");
         } catch (ClassNotFoundException ex) {
-            System.out.println("hey");
+            System.out.println("Error");
         }
     }
     
-    
-    
     //fase 4
-    private void Menu() {
+    public void Menu() {
         System.out.println("1. Cazar Pokemon");
         System.out.println("2. Ver Pokemons");
         System.out.println("3. Transferir Pokemon");

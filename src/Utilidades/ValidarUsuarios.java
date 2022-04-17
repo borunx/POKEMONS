@@ -43,4 +43,16 @@ public class ValidarUsuarios {
         nueva_entrada.close();
         
     }
+    
+    public static boolean existenciaUsuario(String nombre){
+        String rutaUsuario = Rutas.rutaUsuario(nombre);
+        
+        File comprobarUsuario = new File(rutaUsuario);
+        
+        if (comprobarUsuario.exists()) {
+            return true;
+        }
+        else
+            return false;
+    }
 }

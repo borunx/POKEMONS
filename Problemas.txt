@@ -1,2 +1,5 @@
 Fase 9
 Error al borrar el fichero despues del intercambio
+
+Fase 4
+Algunas interfaces no se usan

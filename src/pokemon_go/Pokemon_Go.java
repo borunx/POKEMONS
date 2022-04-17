@@ -17,8 +17,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -114,33 +112,27 @@ public class Pokemon_Go {
             System.out.println("No se ha encontrado el fichero del pokemon");
         }
         
+        //fase 10
         if(poke_operaciones.existenciaPokemon(anyadir)){
             
-            System.out.println("Ya tienes a " +anyadir.getNombre());
+            System.out.println("Ya tienes a " + anyadir.getNombre());
             System.out.println("Deseas volver a cazarlo? ");
             String cazar_de_nuevo =sc.nextLine();
             
             if(cazar_de_nuevo.equalsIgnoreCase("si")){
-            
-                int numOCulto = Aleatorios.generarNumAleatorio(anyadir.getCP());
-                System.out.println(numOCulto);
-        
-                System.out.println("Adivina el numero entre 1 y " + anyadir.getCP()/10);
-                int intento = sc.nextInt();
-        
-                if (intento==numOCulto) {
-                
-                    System.out.println("Muy bien, has capturado a " + anyadir.getNombre());
-                    poke_operaciones.cazarPokemon(anyadir);
-                }
-                else
-                    System.out.println(anyadir.getNombre() + " se ha escapado");
+                AdivinarNumPokemon(anyadir, sc);
             }
-            else{
-                System.out.println("Cancelar caza ");
-            }
+            else
+                System.out.println("Caza cancelada");
         }
         else{
+            AdivinarNumPokemon(anyadir, sc);
+        }
+        
+    }
+    
+    //fase 7
+    public void AdivinarNumPokemon(Pokemon anyadir, Scanner sc){
             int numOCulto = Aleatorios.generarNumAleatorio(anyadir.getCP());
             System.out.println(numOCulto);
         
@@ -154,9 +146,6 @@ public class Pokemon_Go {
             }
             else
                 System.out.println(anyadir.getNombre() + " se ha escapado");
-        }
-        
-        
     }
     
     public void recuperarPokemons(String nombre){
@@ -241,7 +230,7 @@ public class Pokemon_Go {
         try {
             PersistenciaPokemon.GuardarTransferencia(poke_operaciones.getMochila().get(posicion_pokemon), receptor_transferencia);
             poke_operaciones.getMochila().remove(posicion_pokemon);
-            System.out.println("Pokemon transferido a " + receptor_transferencia + " con exito");
+            System.out.println("Pokemon transferido a " + receptor_transferencia.toUpperCase() + " con exito");
             
         } catch (IOException ex) {
             System.out.println("No se ha podido transferir el pokemon");
@@ -276,32 +265,6 @@ public class Pokemon_Go {
         System.out.println("0. Salir");
         System.out.print("Opcion: ");
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     //lanzarApp

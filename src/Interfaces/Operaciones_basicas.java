@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * @author 34697
  */
 public interface Operaciones_basicas {
-    
+    //fase 4
     public boolean cazarPokemon(Pokemon pokemon);
     public ArrayList<Pokemon> listarPokemons();
     

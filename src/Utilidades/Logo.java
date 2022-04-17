@@ -13,8 +13,7 @@ import java.util.Scanner;
  * @author 34697
  */
 public class Logo {
-    
-    
+    //fase 1
     public static void mostrarLogo(){
         File logo = new File("PokeImagenes/logo.pok.txt"); 
         try {

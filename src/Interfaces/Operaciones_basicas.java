@@ -13,8 +13,7 @@ import java.util.ArrayList;
  */
 public interface Operaciones_basicas {
     
-    public boolean cazar_pokemon(Pokemon pokemon); //metodo para agregar pokemons a la mochila
-    public ArrayList<Pokemon> listar_pokemons(); // devuelve el arraylist para utilizarlo en la app
-    public int transferir_pokemon();
-    public void recibir_pokemon();
+    public boolean cazarPokemon(Pokemon pokemon);
+    public ArrayList<Pokemon> listarPokemons();
+    
 }

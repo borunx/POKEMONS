@@ -16,7 +16,7 @@ import java.util.Scanner;
  */
 public class ValidarUsuarios {
     
-    public static String LecturaFichero(String ruta) throws FileNotFoundException{
+    public static String LecturaPassword(String ruta) throws FileNotFoundException{
         
         Scanner lectura = new Scanner(new File(ruta));
         
@@ -27,7 +27,7 @@ public class ValidarUsuarios {
         return password;
     }
     
-    public static boolean ValidarContrasenya(String contrasenya, String password_fichero){
+    public static boolean ValidarPassword(String contrasenya, String password_fichero){
         if (contrasenya.equals(password_fichero)) {
             return true;
         }
@@ -35,34 +35,12 @@ public class ValidarUsuarios {
             return false;
     }
     
-    public static void escribirFichero(String entrada, String ruta) throws IOException{
+    public static void EscribirPassword(String entrada, String ruta) throws IOException{
         FileWriter nueva_entrada = new FileWriter(ruta);
         
         nueva_entrada.write("" + entrada);
         
         nueva_entrada.close();
         
-    }
-    
-    public static String ruta_Usuario(String nombre) {
-        
-        String ruta_Usuario = "Usuarios/user_" + nombre + ".dat.txt"; //Devuelve
-        //ruta de los usuarios
-        
-        return ruta_Usuario;
-    }
-    
-    public static String ruta_Mochila(String nombre) {
-        String ruta_Mochila = "Mochilas/" + nombre + "_mochila.dat.txt";//Crear
-        //ruta de las mochilas
-        
-        return ruta_Mochila;
-    }
-    
-    public static String ruta_Mochila_J(String nombre) {
-        String ruta_JMochila = "Mochilas/" + nombre + "_jmochila.json";//Crear
-        //ruta de las mochilas en formato json
-        
-        return ruta_JMochila;
     }
 }

@@ -7,8 +7,9 @@ package pokemon_go;
 import Objetos.Pokemon;
 import Persistencia.PersistenciaPokemon;
 import Utilidades.Aleatorios;
-import Utilidades.CompararPokemons;
+import Utilidades.OrdenarPokemons;
 import Utilidades.Logo;
+import Utilidades.Rutas;
 import Utilidades.ValidarUsuarios;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,151 +35,104 @@ public class Pokemon_Go {
         app.lanzarApp();
     }
     
-    //correr el programa
-    private void lanzarApp(){
-        poke_operaciones = new DAOPokemon();
-        Scanner sc = new Scanner (System.in);
-        
-        //mostrarLogo
-        Logo.mostrarLogo();
-        
-        //login usuario, pedir datos
-        System.out.println("Nombre de usuario: ");
-        String nombre = sc.nextLine();
-        
-        System.out.println("Contraseña: ");
-        String contrasenya = sc.nextLine();
-        
-        boolean lanzar_programa=Identificacion(nombre, contrasenya,sc);
-        
-        //cargar mochila
-        recuperarPokemons(nombre);
-        
-        if (lanzar_programa) {
-            //poke_operaciones.cargarMochila(); //(fase 5c) falta poner los pokemons de user_mochila.dat en la mochila
-            int opcion;
-        
-            do {
-                mostrarMenu();
-                opcion=sc.nextInt();
-                switch (opcion){
-                case 1:
-                    cazar_Pokemon(sc);
-                    break;
-                case 2:
-                    VerPokemons();
-                    break; 
-                case 3:
-                    TransferirPokemon();
-                    System.out.println("No implementada");
-                    break; 
-                case 4:
-                    RecibirPokemon(nombre);
-                    System.out.println("No implementada");
-                    break; 
-                case 0:
-                    Salir(nombre);
-                    break; 
-                }
-            } while (opcion!=0);
-        }
-        
-    }
-    
-    //fase2y3
+    //fase 2 y 3
     public boolean Identificacion(String nombre, String contrasenya, Scanner sc){
-        boolean acceso_usuario=false;
-        String ruta_usuario = ValidarUsuarios.ruta_Usuario(nombre);//En Windows si que importan las 
-        //extensiones de los ficheros, por eso hay que añadir .txt
+        
+        boolean accesoUsuario=false;
+        String rutaUsuario = Rutas.rutaUsuario(nombre);
         
         try {
-            String password = ValidarUsuarios.LecturaFichero(ruta_usuario); 
-            //lee la linea del fichero y lo almacena en la variable password
+            String passwordUsuario = ValidarUsuarios.LecturaPassword(rutaUsuario);
             
-            if (ValidarUsuarios.ValidarContrasenya(contrasenya, password)) {
-                //compara la linea del fichero con la contraseña introducida por el usuario
+            if (ValidarUsuarios.ValidarPassword(contrasenya, passwordUsuario)) {
                 System.out.println("Login correcto, Hola " + nombre + "!");
-                acceso_usuario=true;
+                accesoUsuario = true;
             }
             else{
                 System.out.println("Login incorrecto");
-                acceso_usuario=false;
+                accesoUsuario = false;
             }
-                
             
         } catch (FileNotFoundException ex) {
             System.out.println("No se ha encontrado el usuario");
             System.out.println("Desea crearlo?");
             String creacion = sc.nextLine();
+            
             if (creacion.equalsIgnoreCase("si")) {
                 try {
-                    ValidarUsuarios.escribirFichero(contrasenya, ruta_usuario);
-                    //si el usuario no existe, crea su fichero y inserta la contraseña dentro
-                    System.out.println("Usuario " + nombre + " creado correctamente");
-                    acceso_usuario=true;
+                    crearUsuario(nombre, contrasenya, rutaUsuario);
+                    accesoUsuario = true;
+                    
                 } catch (IOException ex1) {
                     ex1.printStackTrace();
                 }
             }
             else{
                 System.out.println("Saliendo...");
-                acceso_usuario=false;
+                accesoUsuario = false;
             }
         }
-        return acceso_usuario;
+        return accesoUsuario;
     }
-    //fase 5
-    public void cazar_Pokemon(Scanner sc){
+    
+    public void crearUsuario(String nombre, String contrasenya, String rutaUsuario) throws IOException{
         
-        ArrayList<String> poke_nombres = new ArrayList<>();
+        ValidarUsuarios.EscribirPassword(contrasenya, rutaUsuario);
+        System.out.println("Usuario " + nombre + " creado correctamente");
+        
+    }
+    
+    //fase 5
+    public void cazarPokemon(Scanner sc){
+        
+        ArrayList<String> pokeNombres = new ArrayList<>();
         
         try {
-            Scanner lectura = new Scanner(new File("nombres.pok.txt"));
-            while(lectura.hasNextLine()) {
-                String frase = lectura.nextLine();
-                poke_nombres.add(frase); //cargar nombres en la arraylist
+            Scanner leerNombres = new Scanner(new File("nombres.pok.txt"));
+            while(leerNombres.hasNextLine()) {
+                String frase = leerNombres.nextLine();
+                pokeNombres.add(frase);
         }
-        lectura.close();
+        leerNombres.close();
             
         } catch (FileNotFoundException e) {
             System.out.println("Fichero no encontrado");
         }
         
-        int eleccion_pokemon = Aleatorios.aleatorioArray(poke_nombres);
+        int eleccion_pokemon = Aleatorios.aleatorioArray(pokeNombres);
         
-        String nombre_pokemon_azar = poke_nombres.get(eleccion_pokemon); //nombre al azar
-        String ruta_pokemon = "PokeImagenes/" +nombre_pokemon_azar + ".pok.txt";
+        String pokemonAleatorio = pokeNombres.get(eleccion_pokemon);
+        String rutaPokemon = Rutas.rutaPokemon(pokemonAleatorio);
         
-        //System.out.println(ruta_pokemon);
-        Pokemon anyadir = new Pokemon(nombre_pokemon_azar); //crear pokemon
+        Pokemon anyadir = new Pokemon(pokemonAleatorio);
         
         try {
-            PersistenciaPokemon.visualizarPokemon(ruta_pokemon); //mostrar ASCII-Pokemon
-            System.out.println(nombre_pokemon_azar + " tiene un CP de " + anyadir.getCP());
+            PersistenciaPokemon.visualizarPokemon(rutaPokemon);
+            System.out.println(pokemonAleatorio + " tiene un CP de " + anyadir.getCP());
             
         } catch (FileNotFoundException ex) {
-            System.out.println("No se ha encontrado el fichero");
+            System.out.println("No se ha encontrado el fichero del pokemon");
         }
         
-        int num_adivinar = Aleatorios.generarNumAleatorio(anyadir.getCP());
-        System.out.println(num_adivinar);
+        //fase 7
+        int numOCulto = Aleatorios.generarNumAleatorio(anyadir.getCP());
+        System.out.println(numOCulto);
         
         System.out.println("Adivina el numero entre 1 y " + anyadir.getCP()/10);
-        int num_secreto = sc.nextInt();
+        int intento = sc.nextInt();
         
-        if (num_secreto==num_adivinar) {
+        if (intento==numOCulto) {
             System.out.println("Muy bien, has capturado a " + anyadir.getNombre());
-            poke_operaciones.cazar_pokemon(anyadir);//añadirlo a la mochila
+            poke_operaciones.cazarPokemon(anyadir);
         }
         else
             System.out.println(anyadir.getNombre() + " se ha escapado");
-        
     }
     
-    //fase 5c - recuperar mochila
     public void recuperarPokemons(String nombre){
         try {
             poke_operaciones.cargarMochila(nombre);
+            System.out.println("Se han cargado " + poke_operaciones.ItemsMochila() +" pokemons a tu mochila");
             
         } catch (IOException ex) {
             System.out.println(nombre.toUpperCase() + " de momento no tiene mochila");
@@ -187,11 +141,10 @@ public class Pokemon_Go {
         }
     }
     
-    //fase 5c - guardar mochila
     public void Salir(String nombre){
         try {
             if (!(poke_operaciones.getMochila().isEmpty())) {
-                PersistenciaPokemon.Guardar_Pokemons(nombre,poke_operaciones.getMochila());
+                PersistenciaPokemon.GuardarPokemons(nombre,poke_operaciones.getMochila());
                 System.out.println("Guardando pokemons...");
             }
             else
@@ -206,25 +159,46 @@ public class Pokemon_Go {
     
     public void VerPokemons() {
         //fase 8
-        Collections.sort(poke_operaciones.getMochila(), new CompararPokemons());
+        Collections.sort(poke_operaciones.getMochila(), new OrdenarPokemons());
         
         //fase 6
         if (poke_operaciones.ItemsMochila()==0) {
             System.out.println("No tienes Pokemons en la mochila");
         }
         else {
-            for (int i = 0; i < poke_operaciones.ItemsMochila(); i++) {
-                System.out.println(poke_operaciones.getMochila().get(i).toString());
+            for (Pokemon pokemon : poke_operaciones.getMochila()) {
+                System.out.println(pokemon.toString());
             }
+            System.out.println("Tienes " + poke_operaciones.ItemsMochila() + " pokemons en la mochila");
         }
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     //fase 9
     public void TransferirPokemon() {
         Scanner sc = new Scanner (System.in);
         System.out.println("Que pokemon quiere transferir: ");
         String transferir = sc.nextLine();
-        //Transformar el texto en el formato correcto para ser leido
+        
         String pokemon_transferido = transferir.toUpperCase().charAt(0) 
                 + transferir.substring(1, transferir.length()).toLowerCase();
         
@@ -237,7 +211,7 @@ public class Pokemon_Go {
             System.out.println("A que usuario quiere transferir el pokemon:");
             String receptor_transferencia = sc.nextLine();
             try {
-                PersistenciaPokemon.Guardar_Transferencia(poke_operaciones.getMochila().get(posicion_pokemon), receptor_transferencia);
+                PersistenciaPokemon.GuardarTransferencia(poke_operaciones.getMochila().get(posicion_pokemon), receptor_transferencia);
                 poke_operaciones.getMochila().remove(posicion_pokemon);
             } catch (IOException ex) {
                 System.out.println("No se ha podido guardar el pokemon");
@@ -247,9 +221,35 @@ public class Pokemon_Go {
             System.out.println("No tienes el pokemon");
     }
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public void RecibirPokemon(String nombre) {
         try {
-            Pokemon pokemon_recibido = PersistenciaPokemon.Recibir_Transferencia(nombre);
+            Pokemon pokemon_recibido = PersistenciaPokemon.RecibirTransferencia(nombre);
             poke_operaciones.getMochila().add(pokemon_recibido);
             
             File transferencia = new File("Transferencias/transfer_" + nombre);
@@ -262,13 +262,95 @@ public class Pokemon_Go {
         }
     }
     
-    private void mostrarMenu() {
+    
+    
+    //fase 4
+    private void Menu() {
         System.out.println("1. Cazar Pokemon");
         System.out.println("2. Ver Pokemons");
         System.out.println("3. Transferir Pokemon");
         System.out.println("4. Recibir Pokemon");
         System.out.println("0. Salir");
         System.out.print("Opcion: ");
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //lanzarApp
+    private void lanzarApp(){
+        
+        //variables
+        String nombreUsuario, contrasenya;
+        boolean runApp;
+        
+        poke_operaciones = new DAOPokemon();
+        Scanner sc = new Scanner (System.in);
+        
+        Logo.mostrarLogo();
+        
+        System.out.print("Nombre de usuario: ");
+        nombreUsuario = sc.nextLine();
+        
+        System.out.print("Contraseña: ");
+        contrasenya = sc.nextLine();
+        
+        runApp = Identificacion(nombreUsuario, contrasenya,sc);
+        
+        if (runApp) {
+            recuperarPokemons(nombreUsuario);
+            int opcion;
+        
+            do {
+                Menu();
+                opcion=sc.nextInt();
+                switch (opcion){
+                case 1:
+                    cazarPokemon(sc);
+                    break;
+                case 2:
+                    VerPokemons();
+                    break; 
+                case 3:
+                    TransferirPokemon();
+                    break; 
+                case 4:
+                    RecibirPokemon(nombreUsuario);
+                    break; 
+                case 0:
+                    Salir(nombreUsuario);
+                    break;
+                default:
+                    System.out.println("Opcion fuera de rango");
+                }
+                
+            } while (opcion!=0);
+        }
+        
     }
 }
 

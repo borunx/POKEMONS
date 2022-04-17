@@ -5,6 +5,7 @@
 package Persistencia;
 
 import Objetos.Pokemon;
+import Utilidades.Rutas;
 import Utilidades.ValidarUsuarios;
 import com.google.gson.Gson;
 import java.io.File;
@@ -36,13 +37,13 @@ public class PersistenciaPokemon {
         lectura.close();
     }
     
-    public static void Guardar_Pokemons(String nombre_usuario, ArrayList<Pokemon> mochila) throws FileNotFoundException, IOException{
+    public static void GuardarPokemons(String nombreUsuario, ArrayList<Pokemon> mochila) throws FileNotFoundException, IOException{
         
-        String ruta_mochila = ValidarUsuarios.ruta_Mochila(nombre_usuario);
+        String rutaMochila = Rutas.rutaMochila(nombreUsuario);
         
-        FileOutputStream escribir = new FileOutputStream(ruta_mochila);
+        FileOutputStream escribirPokemons = new FileOutputStream(rutaMochila);
         
-        ObjectOutputStream pokeDatos = new ObjectOutputStream(escribir);
+        ObjectOutputStream pokeDatos = new ObjectOutputStream(escribirPokemons);
         
         pokeDatos.writeObject(mochila);
         
@@ -51,34 +52,20 @@ public class PersistenciaPokemon {
     
     public static ArrayList<Pokemon> Recuperar_Pokemons(String nombre_usuario, ArrayList<Pokemon> mochila) throws FileNotFoundException, IOException, ClassNotFoundException{
         
-        String ruta_mochila = ValidarUsuarios.ruta_Mochila(nombre_usuario);
+        String rutaMochila = Rutas.rutaMochila(nombre_usuario);
         
-        ArrayList<Pokemon> cargar_mochila = new ArrayList<Pokemon>();
+        ArrayList<Pokemon> cargarMochila = new ArrayList<Pokemon>();
         
-        FileInputStream fichero = new FileInputStream(ruta_mochila);
+        FileInputStream ficheroPokemons = new FileInputStream(rutaMochila);
         
-        ObjectInputStream lectura = new ObjectInputStream(fichero);
+        ObjectInputStream lectura = new ObjectInputStream(ficheroPokemons);
         
-        cargar_mochila = (ArrayList<Pokemon>) lectura.readObject();
+        cargarMochila = (ArrayList<Pokemon>) lectura.readObject();
         
-        return cargar_mochila;
+        return cargarMochila;
     }
     
-    public static boolean Borrar_Usuario(String nombre) {
-        
-        String ruta_usuario = ValidarUsuarios.ruta_Usuario(nombre);
-        
-        File usuario = new File(ruta_usuario);
-        
-        if (usuario.exists()) {
-            usuario.delete();
-            return true;
-        }
-        else
-            return false;
-    }
-    
-    public static void Guardar_Transferencia(Pokemon pokemon, String receptor_transferencia) throws FileNotFoundException, IOException {
+    public static void GuardarTransferencia(Pokemon pokemon, String receptor_transferencia) throws FileNotFoundException, IOException {
         
         String ruta_transferencia = "Transferencias/transfer_" + receptor_transferencia;
         
@@ -91,13 +78,13 @@ public class PersistenciaPokemon {
         pokeTransfer.close();
     }
     
-    public static Pokemon Recibir_Transferencia(String nombre_usuario) throws FileNotFoundException, IOException, ClassNotFoundException{
+    public static Pokemon RecibirTransferencia(String nombre_usuario) throws FileNotFoundException, IOException, ClassNotFoundException{
         
-        String ruta_transferencia = "Transferencias/transfer_" + nombre_usuario;
+        String rutaTransferencia = Rutas.rutaTransferencia(nombre_usuario);
         
         Pokemon pokemon;
         
-        FileInputStream fichero_transferencia = new FileInputStream(ruta_transferencia);
+        FileInputStream fichero_transferencia = new FileInputStream(rutaTransferencia);
         
         ObjectInputStream lectura_transferencia = new ObjectInputStream(fichero_transferencia);
         
@@ -105,6 +92,4 @@ public class PersistenciaPokemon {
         
         return pokemon;
     }
-    
-    
 }

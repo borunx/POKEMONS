@@ -23,7 +23,7 @@ public class DAOPokemon implements Operaciones_basicas{
     }
 
     @Override
-    public boolean cazar_pokemon(Pokemon pokemon) {
+    public boolean cazarPokemon(Pokemon pokemon) {
         return mochila.add(pokemon);
     }
 
@@ -32,7 +32,7 @@ public class DAOPokemon implements Operaciones_basicas{
     }
 
     @Override
-    public ArrayList<Pokemon> listar_pokemons() {
+    public ArrayList<Pokemon> listarPokemons() {
         return getMochila();
     }
     
@@ -44,14 +44,6 @@ public class DAOPokemon implements Operaciones_basicas{
         mochila = PersistenciaPokemon.Recuperar_Pokemons(nombre, mochila);
     }
 
-    @Override
-    public int transferir_pokemon() {
-        return 0;
-    }
-
-    @Override
-    public void recibir_pokemon() {
-    }
     
     
 }

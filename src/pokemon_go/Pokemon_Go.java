@@ -83,8 +83,8 @@ public class Pokemon_Go {
     }
     
     //fase 5
-    public void cazarPokemon(Scanner sc){
-        
+    public void cazarPokemon(){
+        Scanner sc = new Scanner(System.in);
         ArrayList<String> pokeNombres = new ArrayList<>();
         
         try {
@@ -114,19 +114,49 @@ public class Pokemon_Go {
             System.out.println("No se ha encontrado el fichero del pokemon");
         }
         
-        //fase 7
-        int numOCulto = Aleatorios.generarNumAleatorio(anyadir.getCP());
-        System.out.println(numOCulto);
+        if(poke_operaciones.existenciaPokemon(anyadir)){
+            
+            System.out.println("Ya tienes a " +anyadir.getNombre());
+            System.out.println("Deseas volver a cazarlo? ");
+            String cazar_de_nuevo =sc.nextLine();
+            
+            if(cazar_de_nuevo.equalsIgnoreCase("si")){
+            
+                int numOCulto = Aleatorios.generarNumAleatorio(anyadir.getCP());
+                System.out.println(numOCulto);
         
-        System.out.println("Adivina el numero entre 1 y " + anyadir.getCP()/10);
-        int intento = sc.nextInt();
+                System.out.println("Adivina el numero entre 1 y " + anyadir.getCP()/10);
+                int intento = sc.nextInt();
         
-        if (intento==numOCulto) {
-            System.out.println("Muy bien, has capturado a " + anyadir.getNombre());
-            poke_operaciones.cazarPokemon(anyadir);
+                if (intento==numOCulto) {
+                
+                    System.out.println("Muy bien, has capturado a " + anyadir.getNombre());
+                    poke_operaciones.cazarPokemon(anyadir);
+                }
+                else
+                    System.out.println(anyadir.getNombre() + " se ha escapado");
+            }
+            else{
+                System.out.println("Cancelar caza ");
+            }
         }
-        else
-            System.out.println(anyadir.getNombre() + " se ha escapado");
+        else{
+            int numOCulto = Aleatorios.generarNumAleatorio(anyadir.getCP());
+            System.out.println(numOCulto);
+        
+            System.out.println("Adivina el numero entre 1 y " + anyadir.getCP()/10);
+            int intento = sc.nextInt();
+        
+            if (intento==numOCulto) {
+                
+                System.out.println("Muy bien, has capturado a " + anyadir.getNombre());
+                poke_operaciones.cazarPokemon(anyadir);
+            }
+            else
+                System.out.println(anyadir.getNombre() + " se ha escapado");
+        }
+        
+        
     }
     
     public void recuperarPokemons(String nombre){
@@ -303,7 +333,7 @@ public class Pokemon_Go {
                 opcion=sc.nextInt();
                 switch (opcion){
                 case 1:
-                    cazarPokemon(sc);
+                    cazarPokemon();
                     break;
                 case 2:
                     VerPokemons();

@@ -43,6 +43,15 @@ public class DAOPokemon implements Operaciones_basicas{
     public void cargarMochila(String nombre) throws IOException, FileNotFoundException, ClassNotFoundException {
         mochila = PersistenciaPokemon.Recuperar_Pokemons(nombre, mochila);
     }
+    
+    public boolean existenciaPokemon(Pokemon pokemon){
+        if(mochila.contains(pokemon)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 
     
     

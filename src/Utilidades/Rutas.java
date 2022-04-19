@@ -12,24 +12,24 @@ public class Rutas {
     
     public static String rutaUsuario(String nombre) {
         
-        String rutaUsuario = "Usuarios/user_" + nombre + ".dat.txt";
+        String rutaUsuario = "Usuarios/user_" + nombre + ".dat";
         return rutaUsuario;
     }
     
     public static String rutaMochila(String nombre) {
         
-        String rutaMochila = "Mochilas/" + nombre + "_mochila.dat.txt";
+        String rutaMochila = "Mochilas/" + nombre + "_mochila.dat";
         return rutaMochila;
     }
     
     public static String rutaMochilaJson(String nombre) {
         
-        String rutaJMochila = "Mochilas/" + nombre + "_jmochila.json";
+        String rutaJMochila = "MochilasJSON/" + nombre + "_jmochila.json";
         return rutaJMochila;
     }
     
     public static String rutaPokemon(String nombrePokemon){
-        String rutaPokemon = "PokeImagenes/" +nombrePokemon + ".pok.txt";
+        String rutaPokemon = "PokeImagenes/" +nombrePokemon + ".pok";
         return rutaPokemon;
     }
     

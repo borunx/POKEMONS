@@ -3,14 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/34697/Documents/NetBeansProjects/POKEMONS/src/Utilidades/OrdenarPokemons.java</file>
-            <file>file:/C:/Users/34697/Documents/NetBeansProjects/POKEMONS/src/Utilidades/Rutas.java</file>
+            <file>file:/C:/Users/34697/Documents/NetBeansProjects/POKEMONS/src/pokemon_go/OpcionesRuleta.java</file>
+            <file>file:/C:/Users/34697/Documents/NetBeansProjects/POKEMONS/src/pokemon_go/Pokemon_Go.java</file>
             <file>file:/C:/Users/34697/Documents/NetBeansProjects/POKEMONS/src/Utilidades/Aleatorios.java</file>
-            <file>file:/C:/Users/34697/Documents/NetBeansProjects/POKEMONS/src/Objetos/Pokemon.java</file>
             <file>file:/C:/Users/34697/Documents/NetBeansProjects/POKEMONS/src/Utilidades/ValidarUsuarios.java</file>
-            <file>file:/C:/Users/34697/Documents/NetBeansProjects/POKEMONS/src/pokemon_go/DAOPokemon.java</file>
             <file>file:/C:/Users/34697/Documents/NetBeansProjects/POKEMONS/src/Persistencia/PersistenciaPokemon.java</file>
-            <file>file:/C:/Users/34697/Documents/NetBeansProjects/POKEMONS/src/Interfaces/Operaciones_basicas.java</file>
+            <file>file:/C:/Users/34697/Documents/NetBeansProjects/POKEMONS/src/pokemon_go/DAOPokemon.java</file>
         </group>
     </open-files>
 </project-private>

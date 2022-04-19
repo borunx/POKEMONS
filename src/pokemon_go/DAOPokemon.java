@@ -36,14 +36,17 @@ public class DAOPokemon implements Operaciones_basicas{
         return getMochila();
     }
     
+    @Override
     public int ItemsMochila(){
         return mochila.size();
     }
     
+    @Override
     public void cargarMochila(String nombre) throws IOException, FileNotFoundException, ClassNotFoundException {
-        mochila = PersistenciaPokemon.Recuperar_Pokemons(nombre, mochila);
+        mochila = PersistenciaPokemon.RecuperarPokemons(nombre);
     }
     
+    @Override
     public boolean existenciaPokemon(Pokemon pokemon){
         if(mochila.contains(pokemon)){
             return true;
@@ -52,7 +55,16 @@ public class DAOPokemon implements Operaciones_basicas{
             return false;
         }
     }
-
+    
+    @Override
+    public void transferirPokemon(int posicion){
+        mochila.remove(posicion);
+    }
+    
+    @Override
+    public boolean recibirPokemon(Pokemon pokemon){
+        return mochila.add(pokemon);
+    }
     
     
 }

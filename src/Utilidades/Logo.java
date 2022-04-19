@@ -15,7 +15,7 @@ import java.util.Scanner;
 public class Logo {
     //fase 1
     public static void mostrarLogo(){
-        File logo = new File("PokeImagenes/logo.pok.txt"); 
+        File logo = new File("PokeImagenes/Logo.pok"); 
         try {
             Scanner leer_logo = new Scanner(logo);
             while (leer_logo.hasNext()) {

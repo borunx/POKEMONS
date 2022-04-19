@@ -50,7 +50,7 @@ public class PersistenciaPokemon {
         pokeDatos.close();
     }
     
-    public static ArrayList<Pokemon> Recuperar_Pokemons(String nombre_usuario, ArrayList<Pokemon> mochila) throws FileNotFoundException, IOException, ClassNotFoundException{
+    public static ArrayList<Pokemon> RecuperarPokemons(String nombre_usuario) throws FileNotFoundException, IOException, ClassNotFoundException{
         
         String rutaMochila = Rutas.rutaMochila(nombre_usuario);
         
@@ -92,4 +92,23 @@ public class PersistenciaPokemon {
         
         return pokemon;
     }
+    
+    /*public static void GuardarPokemonsJSON(String nombre_usuario, ArrayList<Pokemon> mochila) throws IOException{
+        String ruta_jmochila = Rutas.rutaMochilaJson(nombre_usuario);
+        
+        FileWriter escribir_json = new FileWriter(ruta_jmochila);
+        
+        Gson gson = new Gson();
+        
+        String mochila_json = gson.toJson(mochila);
+        
+        escribir_json.write("" + mochila_json);
+        
+        escribir_json.close();
+        //System.out.println(mochila_json);
+    }
+    
+    public static void recuperarPokemonsJSON(String nombre_usuario){
+        
+    }*/
 }

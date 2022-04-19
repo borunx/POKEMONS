@@ -30,7 +30,7 @@ public class Pokemon implements Serializable{
     public int getCP() {
         return CP;
     }
-
+    
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

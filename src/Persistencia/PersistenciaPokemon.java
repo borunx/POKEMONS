@@ -8,6 +8,7 @@ import Objetos.Pokemon;
 import Utilidades.Rutas;
 import Utilidades.ValidarUsuarios;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -62,6 +63,8 @@ public class PersistenciaPokemon {
         
         cargarMochila = (ArrayList<Pokemon>) lectura.readObject();
         
+        lectura.close();
+        
         return cargarMochila;
     }
     
@@ -90,10 +93,13 @@ public class PersistenciaPokemon {
         
         pokemon = (Pokemon) lectura_transferencia.readObject();
         
+        fichero_transferencia.close();
+        lectura_transferencia.close();
+        
         return pokemon;
     }
     
-    /*public static void GuardarPokemonsJSON(String nombre_usuario, ArrayList<Pokemon> mochila) throws IOException{
+    public static void GuardarPokemonsJSON(String nombre_usuario, ArrayList<Pokemon> mochila) throws IOException{
         String ruta_jmochila = Rutas.rutaMochilaJson(nombre_usuario);
         
         FileWriter escribir_json = new FileWriter(ruta_jmochila);
@@ -108,7 +114,27 @@ public class PersistenciaPokemon {
         //System.out.println(mochila_json);
     }
     
-    public static void recuperarPokemonsJSON(String nombre_usuario){
+    public static Pokemon RecuperarPokemonsJSON(String nombre_usuario, ArrayList<Pokemon> mochila) throws FileNotFoundException,JsonSyntaxException{
+        String ruta_jmochila = Rutas.rutaMochilaJson(nombre_usuario);
+        Scanner leerJSON = new Scanner(new File(ruta_jmochila));
+        String json = "";
         
-    }*/
+        while(leerJSON.hasNext()) {
+            json = leerJSON.nextLine();
+        }
+        leerJSON.close();
+        
+        json = json.replace("[", "");
+        json = json.replace("]", "");
+        
+        Gson gson = new Gson();
+        
+        Pokemon pokemon = gson.fromJson(json, Pokemon.class);
+        
+        Pokemon anyadir = new Pokemon(pokemon.getNombre(), pokemon.getCP());
+        
+        mochila.clear();
+        
+        return anyadir;
+    }
 }

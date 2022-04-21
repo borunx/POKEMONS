@@ -22,6 +22,11 @@ public class Pokemon implements Serializable{
         this.CP = r.nextInt(100)+1;
     }
     
+    public Pokemon(String nombre, int CP){
+        this.nombre = nombre;
+        this.CP = CP;
+    }
+    
 
     public String getNombre() {
         return nombre;

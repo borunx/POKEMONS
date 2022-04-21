@@ -11,12 +11,14 @@ import Utilidades.OrdenarPokemons;
 import Utilidades.Logo;
 import Utilidades.Rutas;
 import Utilidades.ValidarUsuarios;
+import com.google.gson.JsonSyntaxException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -150,17 +152,29 @@ public class Pokemon_Go {
         if (CP<10) {
             CP = 10;
         }
-
-        System.out.println("Adivina el numero entre 1 y " + CP/10);
-        int intento = sc.nextInt();
-
-        if (intento==numOCulto) {
-
-            System.out.println("Muy bien, has capturado a " + anyadir.getNombre().toUpperCase());
+        
+        if (CP/10==1) {
+            System.out.println(anyadir.getNombre().toUpperCase() + " es debil, capturado correctamente");
             poke_operaciones.cazarPokemon(anyadir);
         }
-        else
-            System.out.println(anyadir.getNombre().toUpperCase() + " se ha escapado");
+        else{
+            try{
+                System.out.println("Adivina el numero entre 1 y " + CP/10);
+                int intento = sc.nextInt();
+
+                if (intento==numOCulto) {
+
+                    System.out.println("Muy bien, has capturado a " + anyadir.getNombre().toUpperCase());
+                    poke_operaciones.cazarPokemon(anyadir);
+                }
+                else
+                    System.out.println(anyadir.getNombre().toUpperCase() + " se ha escapado");
+                
+            } catch(InputMismatchException e){
+                System.out.println("Solo se aceptan numeros");
+            }
+            
+        }
     }
     
     //fase 5c
@@ -267,14 +281,15 @@ public class Pokemon_Go {
     }
     
     public void RecibirPokemon(String nombre) {
+        System.out.println("IMPORTANTE: En Windows aveces no borra el fichero de transferencia al recibirlo, en Linux si");
         try {
             Pokemon pokemon_recibido = PersistenciaPokemon.RecibirTransferencia(nombre);
             poke_operaciones.recibirPokemon(pokemon_recibido);
             System.out.println("Pokemon transferido a la mochila con exito");
             
             File transferencia = new File(Rutas.rutaTransferencia(nombre));
-            transferencia.delete();
-            
+            transferencia.delete(); //En Windows no borra el fichero al recibirlo
+            //En linux si que borra el fichero al recibirlo
         } catch (IOException ex) {
             System.out.println("No tienes ninguna transferencia");
         } catch (ClassNotFoundException ex) {
@@ -289,17 +304,17 @@ public class Pokemon_Go {
         System.out.println("3. Transferir Pokemon");
         System.out.println("4. Recibir Pokemon");
         System.out.println("5. Ruleta Pokemon");
-        //System.out.println("6. Historial de Jugadores");
+        System.out.println("6. Historial de Jugadores");
         System.out.println("7. Guardar Pokemons en JSON");
         System.out.println("8. Recuperar Pokemons en JSON");
         System.out.println("0. Salir");
         System.out.print("Opcion: ");
     }
     
-    /*//fase 11
+    //fase 11
     public void ruletaPokemon(){
-        if (poke_operaciones.ItemsMochila()<2) {
-            System.out.println("Necesitas un minimo de 2 Pokemon para tirar de la ruleta");
+        if (poke_operaciones.ItemsMochila()<3) {
+            System.out.println("Necesitas un minimo de 3 Pokemon para tirar de la ruleta");
         }
         else{
             Random r = new Random();
@@ -327,7 +342,6 @@ public class Pokemon_Go {
                     break;
             }
         }
-        
     }
     
     public void menuRuleta(){
@@ -371,27 +385,6 @@ public class Pokemon_Go {
                 System.out.println(" " + jugador);
             }
         }
-        guardarHistorial();
-    }
-    
-    public void guardarHistorial(){
-        String ruta_mochila = "Mochilas";
-        File mochila = new File("Mochilas");
-        File historial_jugadores = new File("HistorialJugadores");
-        
-        try {
-            FileWriter historial = new FileWriter(historial_jugadores);
-            for (File file : mochila.listFiles()) {
-                if (!file.isDirectory()) {
-                    String jugador = file.getName().replace("_mochila.dat", "").toUpperCase();
-                    historial.write("" + jugador + "\r\n");
-                }
-            }
-            historial.close();
-            
-        } catch (IOException ex) {
-            System.out.println("Ha ocurrido un error en el historial");
-        }
     }
     
     //fase 14
@@ -401,8 +394,8 @@ public class Pokemon_Go {
         }
         else{
             try {
-                System.out.println("Guardando Pokemons en mochila JSON...");
                 PersistenciaPokemon.GuardarPokemonsJSON(nombre, poke_operaciones.getMochila());
+                System.out.println("Guardando Pokemons en mochila JSON...");
                 
             } catch (IOException ex) {
                 System.out.println("Error: No se ha podido crear el fichero .json");
@@ -410,10 +403,21 @@ public class Pokemon_Go {
         }
     }
     
-    public static void RecuperarMochilaJSON(String nombre){
-        
+    public void RecuperarMochilaJSON(String nombre){
+        System.out.println("IMPORTANTE: Esta opción solo funciona con un solo Pokemon en la mochila JSON");
+        try {
+            Pokemon anyadir = PersistenciaPokemon.RecuperarPokemonsJSON(nombre,poke_operaciones.getMochila());
+            poke_operaciones.recibirPokemon(anyadir);
+            
+            System.out.println("Se ha cargado " + poke_operaciones.ItemsMochila() + " Pokemon de tu mochila JSON");
+            
+        } catch (FileNotFoundException ex) {
+            System.out.println("No tienes mochila JSON");
+        } catch (JsonSyntaxException ex){
+            System.out.println("No se puede cargar mas de un pokemon");
+        }
     }
-    */
+    
     //lanzarApp
     private void lanzarApp(){
         
@@ -437,43 +441,48 @@ public class Pokemon_Go {
         if (runApp) {
             recuperarPokemons(nombreUsuario);
             int opcion;
+            try{
+                do {
+                    Menu();
+                    opcion=sc.nextInt();
+                    switch (opcion){
+                        case 1:
+                            cazarPokemon();
+                            break;
+                        case 2:
+                            VerMochila();
+                            break; 
+                        case 3:
+                            TransferirPokemon();
+                            break; 
+                        case 4:
+                            RecibirPokemon(nombreUsuario);
+                            break; 
+                        case 5:
+                            ruletaPokemon();
+                            break;
+                        case 6:
+                            historialJugadores();
+                            break;
+                        case 7:
+                            GuardarJSON(nombreUsuario);
+                            break;
+                        case 8:
+                            RecuperarMochilaJSON(nombreUsuario);
+                            break;
+                        case 0:
+                            Salir(nombreUsuario);
+                            break;
+                        default:
+                            System.out.println("Opcion fuera de rango");
+                    }
+
+                } while (opcion!=0);
+            } catch(InputMismatchException e){
+                System.out.println("Error: solo se aceptan numeros. \nSe guardar lo hecho hasta ahora.");
+                Salir(nombreUsuario);
+            }
             
-            do {
-                Menu();
-                opcion=sc.nextInt();
-                switch (opcion){
-                    case 1:
-                        cazarPokemon();
-                        break;
-                    case 2:
-                        VerMochila();
-                        break; 
-                    case 3:
-                        TransferirPokemon();
-                        break; 
-                    case 4:
-                        RecibirPokemon(nombreUsuario);
-                        break; 
-                    /*case 5:
-                        ruletaPokemon();
-                        break;
-                    case 6:
-                        historialJugadores();
-                        break;
-                    case 7:
-                        GuardarJSON(nombreUsuario);
-                        break;
-                    case 8:
-                        RecuperarMochilaJSON(nombreUsuario);
-                        break;*/
-                    case 0:
-                        Salir(nombreUsuario);
-                        break;
-                    default:
-                        System.out.println("Opcion fuera de rango");
-                }
-                
-            } while (opcion!=0);
         }
         
     }

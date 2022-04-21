@@ -479,7 +479,7 @@ public class Pokemon_Go {
 
                 } while (opcion!=0);
             } catch(InputMismatchException e){
-                System.out.println("Error: solo se aceptan numeros. \nSe guardar lo hecho hasta ahora.");
+                System.out.println("Error: solo se aceptan numeros. \nSe guardara lo hecho hasta ahora.");
                 Salir(nombreUsuario);
             }
             
